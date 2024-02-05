@@ -1,6 +1,7 @@
 {
   "name": "aqa_project_2024",
   "version": "1.0.0",
+  "type": "module",
   "description": "examples of js code",
   "main": "10.js",
   "scripts": {
@@ -17,6 +18,7 @@
   },
   "homepage": "https://github.com/Densf2/aqa_testing#readme",
   "dependencies": {
+    "chalk": "^5.3.0",
     "jest": "^29.7.0"
   }
 }
