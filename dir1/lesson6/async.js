@@ -36,7 +36,7 @@ hiWithParam('Koala2');
 //   }
 // );
 
-let myOwnPromise = new Promise(function (resolve, reject) {
+const myOwnPromise = new Promise((resolve, reject) => {
   resolve('resultf of function based on promise - good');
   reject(new Error('bad results of promise'));
 });
@@ -46,14 +46,14 @@ myOwnPromise.then(
   (error) => console.log(error),
 );
 
-let myOwnPromise2 = new Promise(function (resolve, reject) {
+const myOwnPromise2 = new Promise((resolve, reject) => {
   setTimeout(() => resolve('Good Result'), 1000);
 });
 myOwnPromise2.then(
   (result) => console.log(result),
   (error) => console.log(error),
 );
-let myOwnPromise3 = new Promise(function (resolve, reject) {
+const myOwnPromise3 = new Promise((resolve, reject) => {
   setTimeout(() => reject('!Errorka!'), 1000);
 });
 
@@ -92,7 +92,7 @@ async function hello() {
   return 'Hello';
 }
 
-/*console.log(hello()) => */ hello().then(console.log);
+/* console.log(hello()) => */ hello().then(console.log);
 
 const urlFetch = 'https://api.github.com/users/github';
 

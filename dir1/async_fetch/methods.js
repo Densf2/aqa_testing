@@ -9,6 +9,8 @@ async function getSingleUserData() {
 getSingleUserData();
 
 let nonUsed;
+let nonUsed2;
+let nonUsed3;
 
 // const dataJSON = {
 //     "name": "Koala",
