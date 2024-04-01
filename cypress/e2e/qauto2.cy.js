@@ -170,6 +170,7 @@ describe('tests for hillel auto', () => {
 
   it('Add expnses', () => {
     cy.fixture('newCar.json').then((newCar) => {
+      const prevCreatedCarId = newCar.createdCarId;
       const today = new Date();
       const dateString = today.toLocaleDateString('uk-UA', {
         year: 'numeric',
@@ -189,9 +190,9 @@ describe('tests for hillel auto', () => {
           method: 'POST',
           url: '/api/expenses',
           body: {
-            carId: newCar.createdCarId,
+            carId: prevCreatedCarId,
             reportedAt: expectedDate,
-            mileage: increasedMileageNumber + 103,
+            mileage: increasedMileageNumber + 3,
             liters: litresV,
             totalCost: 20,
             forceMileage: true,
@@ -203,14 +204,17 @@ describe('tests for hillel auto', () => {
           expect(response.status).to.equal(200);
           expect(response.body).to.have.property('status', 'ok');
           expect(response.body.data).to.have.property('id');
-          expect(response.body.data).to.have.property('carId', carId);
+          expect(response.body.data).to.have.property(
+            'carId',
+            prevCreatedCarId,
+          );
           expect(response.body.data).to.have.property(
             'reportedAt',
             expectedDate,
           );
           expect(response.body.data).to.have.property(
             'mileage',
-            increasedMileageNumber + 100,
+            increasedMileageNumber + 3,
           );
           expect(response.body.data).to.have.property('liters', litresV);
         });
