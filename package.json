@@ -7,7 +7,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky",
-    "lint_one_file": "npx eslint dir1/async_fetch/methods.js --fix",
+    "lint_one_file": "npx eslint dir1/objects/obj_methods.js --fix",
     "cy:run:headed": "npx cypress run -b chrome --headed --spec=cypress/e2e/qauto2.cy.js",
     "param_for_env": "--env hostQa=https://qauto.forstudy.space",
     "cy:run:headless": "npx cypress run -b chrome --headless --spec"
