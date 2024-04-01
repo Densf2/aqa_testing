@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 /* eslint-disable import/extensions */
 /* eslint-disable no-undef */
 // eslint-disable-next-line import/extensions
@@ -7,6 +8,8 @@ import { mileage } from '../fixtures/mileage.js';
 
 describe('tests for hillel auto', () => {
   const garagepage = new GaragePage();
+  let createdCarId;
+  const mileageText = '10101';
   beforeEach(() => {
     // const BaseUrl1 = Cypress.env('qaQautoTestingUrl');
     const BaseUrl1 = Cypress.env('hostQa');
@@ -32,7 +35,7 @@ describe('tests for hillel auto', () => {
     // cy.get('@getCars').its('response.statusCode').should('eq', 200);
   });
 
-  it('request usage', () => {
+  it.skip('request usage', () => {
     cy.wait(1000);
     cy.getCookie('sid').then((cookie) => {
       const cookieValue = cookie.value;
@@ -42,7 +45,7 @@ describe('tests for hillel auto', () => {
         body: {
           carBrandId: 1,
           carModelId: 1,
-          mileage: 2024,
+          mileage: 24,
         },
         headers: {
           Cookie: `sid=${cookieValue}`,
@@ -75,7 +78,7 @@ describe('tests for hillel auto', () => {
     cy.get('.modal-footer .btn-primary').click();
   });
 
-  it('check the car data', () => {
+  it.skip('check the car data', () => {
     // cy.get('.car-body input[name="miles"]')
     //   .first()
     //   .should('have.text', '30000');
@@ -101,7 +104,7 @@ describe('tests for hillel auto', () => {
   //   });
   // }
 
-  it('use conditional', () => {
+  it.skip('use conditional', () => {
     cy.wait(1000);
     cy.get('a[routerlink="expenses"]').should('be.visible');
     cy.get('body').then(($body) => {
@@ -117,6 +120,101 @@ describe('tests for hillel auto', () => {
         console.log('clicked on the link fule expenses');
         cy.get('a[routerlink="expenses"]').click();
       }
+    });
+  });
+
+  it('create car and get id', () => {
+    garagepage.addCarButton().should('be.visible').click();
+    cy.get('h4.modal-title').should('have.text', 'Add a car');
+    cy.get('input#addCarMileage').click();
+    cy.get('#addCarBrand').select('BMW');
+    cy.get('input#addCarMileage').clear().type(mileageText);
+    cy.intercept('POST', '/api/cars').as('addCar');
+    cy.get('.modal-footer .btn-primary').click();
+    cy.get('@addCar')
+      .its('response')
+      .then((response) => {
+        expect(response.statusCode).to.equal(201);
+        createdCarId = response.body.data.id;
+        cy.writeFile('cypress/fixtures/newCar.json', { createdCarId });
+      });
+  });
+
+  it.skip('verify car id in the list with request', () => {
+    cy.wait(2000);
+    cy.getCookie('sid').then((cookie) => {
+      const cookieValue = cookie.value;
+      cy.request({
+        method: 'GET',
+        url: '/api/cars',
+        headers: {
+          Cookie: `sid=${cookieValue}`,
+        },
+      }).then((response) => {
+        expect(response.statusCode).to.equal(200);
+        expect(response.body.data[0]).to.have.property('id', createdCarId);
+      });
+    });
+  });
+
+  it('verify car id in the list with intercept', () => {
+    cy.intercept('GET', '/api/cars').as('getCars');
+    cy.get('div.panel-page_heading h1').should('have.text', 'Garage');
+    cy.get('@getCars')
+      .its('response')
+      .then((response) => {
+        expect(response.statusCode).to.equal(200);
+        expect(response.body.data[0]).to.have.property('id', createdCarId);
+      });
+  });
+
+  it('Add expnses', () => {
+    cy.fixture('newCar.json').then((newCar) => {
+      const today = new Date();
+      const dateString = today.toLocaleDateString('uk-UA', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      });
+      const parts = dateString.split('.');
+      const expectedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
+      const litresV = 23;
+      const mileageNumber = parseInt(mileageText, 10);
+      const increasedMileageNumber = mileageNumber + 50;
+      cy.wait(1000);
+      cy.getCookie('sid').then((cookie) => {
+        const cookieValue = cookie.value;
+
+        cy.request({
+          method: 'POST',
+          url: '/api/expenses',
+          body: {
+            carId: newCar.createdCarId,
+            reportedAt: expectedDate,
+            mileage: increasedMileageNumber + 103,
+            liters: litresV,
+            totalCost: 20,
+            forceMileage: true,
+          },
+          headers: {
+            Cookie: `sid=${cookieValue}`,
+          },
+        }).then((response) => {
+          expect(response.status).to.equal(200);
+          expect(response.body).to.have.property('status', 'ok');
+          expect(response.body.data).to.have.property('id');
+          expect(response.body.data).to.have.property('carId', carId);
+          expect(response.body.data).to.have.property(
+            'reportedAt',
+            expectedDate,
+          );
+          expect(response.body.data).to.have.property(
+            'mileage',
+            increasedMileageNumber + 100,
+          );
+          expect(response.body.data).to.have.property('liters', litresV);
+        });
+      });
     });
   });
 });

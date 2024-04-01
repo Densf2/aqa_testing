@@ -1,12 +1,12 @@
 {
   "status": "ok",
   "data": {
-    "id": 120467,
+    "id": 121326,
     "carBrandId": 1,
     "carModelId": 1,
     "initialMileage": 2024,
-    "updatedMileageAt": "2024-03-28T19:11:36.899Z",
-    "carCreatedAt": "2024-03-28T19:11:36.899Z",
+    "updatedMileageAt": "2024-04-01T15:41:28.877Z",
+    "carCreatedAt": "2024-04-01T15:41:28.877Z",
     "mileage": 2024,
     "brand": "Audi",
     "model": "TT",
