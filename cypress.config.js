@@ -1,7 +1,8 @@
 /* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
 /* eslint-disable import/no-extraneous-dependencies */
-import { defineConfig } from 'cypress';
+import cypress, { defineConfig } from 'cypress';
+import { addMatchImageSnapshotPlugin } from 'cypress-image-snapshot/plugin.js';
 
 import lib from 'cypress-mochawesome-reporter/lib/index.js';
 
@@ -15,7 +16,7 @@ export default defineConfig({
     viewportWidth: 1300,
     viewportHeight: 800,
     experimentalStudio: true,
-    // baseUrl: 'https://qauto.forstudy.space',
+    // baseUrl: Cypress.env('hostQa'),
     chromeWebSecurity: false,
     retries: {
       openMode: 1,
@@ -39,9 +40,12 @@ export default defineConfig({
         console.log('override after:run');
         await afterRunHook();
       });
+      addMatchImageSnapshotPlugin(on);
       // const dynamicUrl =
       //   config.env.urlFromCli || 'https://qauto.forstudy.space';
       // config.baseUrl = dynamicUrl;
+      // const BaseUrl1 = cypress.env.hostQa;
+      // config.baseUrl = BaseUrl1;
       on('before:browser:launch', (browser, launchOptions) => {
         // console.log(launchOptions.args);
         if (browser.name === 'chrome') {

@@ -18,6 +18,41 @@ describe('tests for hillel auto', () => {
     cy.get('div.alert-success p').contains(
       'You have been successfully logged in',
     );
+    // cy.matchImageSnapshot();
+  });
+
+  it('intercept usage', () => {
+    // cy.intercept('GET', '/api/cars').as('getCars');
+    cy.intercept('GET', '/api/cars', {
+      statusCode: 200,
+      fixture: 'example.json',
+    });
+    cy.get('[routerlink="expenses"]').click();
+    // cy.pause();
+    // cy.get('@getCars').its('response.statusCode').should('eq', 200);
+  });
+
+  it('request usage', () => {
+    cy.wait(1000);
+    cy.getCookie('sid').then((cookie) => {
+      const cookieValue = cookie.value;
+      cy.request({
+        method: 'POST',
+        url: '/api/cars',
+        body: {
+          carBrandId: 1,
+          carModelId: 1,
+          mileage: 2024,
+        },
+        headers: {
+          Cookie: `sid=${cookieValue}`,
+        },
+      }).then((response) => {
+        expect(response.status).to.equal(201);
+        // expect(response.body).to.have.property('data[id]');
+        cy.writeFile('cypress/fixtures/response.json', response.body);
+      });
+    });
   });
 
   it('check the garage page opened', () => {
@@ -52,7 +87,7 @@ describe('tests for hillel auto', () => {
       .should(
         'have.attr',
         'src',
-        'https://qauto.forstudy.space/public/images/brands/bmw.png',
+        'https://qauto.forstudy.space/public/images/brands/audi.png',
       );
   });
 

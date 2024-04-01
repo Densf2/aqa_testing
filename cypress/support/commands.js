@@ -8,6 +8,11 @@
 // commands please read more here:
 // https://on.cypress.io/custom-commands
 // ***********************************************
+
+import { addMatchImageSnapshotCommand } from 'cypress-image-snapshot/command';
+
+addMatchImageSnapshotCommand();
+
 // full login command
 Cypress.Commands.add('loginWithLegacyCreds', () => {
   // const name = Cypress.env('loginName');
