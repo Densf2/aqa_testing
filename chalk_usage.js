@@ -1,7 +1,3 @@
-import chalk from 'chalk'
-/*
-comment
-comment
-comment
-*/
-console.log(chalk.green('Ho-ho-ho'))
+import chalk from 'chalk';
+
+console.log(chalk.green('Ho-ho-ho'));
