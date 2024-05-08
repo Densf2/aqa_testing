@@ -94,15 +94,17 @@ describe('tests for hillel auto', () => {
       );
   });
 
+  // usage of DDT approach in the cypress tests
+  // there should be test cases based on count of data in the file
   // eslint-disable-next-line no-restricted-syntax
-  // for (const { id, mileageVal } of mileage) {
-  //   it(`${id} creating car with mileage`, () => {
-  //     garagepage.addCarButton().should('be.visible').click();
-  //     cy.get('input#addCarMileage').clear().type(`${mileageVal}`);
-  //     cy.get('.modal-footer .btn-primary').click();
-  //     cy.get('div.alert-success p'); // msg for successfully added car
-  //   });
-  // }
+  for (const { id, mileageVal } of mileage) {
+    it(`${id} creating car with mileage`, () => {
+      garagepage.addCarButton().should('be.visible').click();
+      cy.get('input#addCarMileage').clear().type(`${mileageVal}`);
+      cy.get('.modal-footer .btn-primary').click();
+      cy.get('div.alert-success p'); // msg for successfully added car
+    });
+  }
 
   it.skip('use conditional', () => {
     cy.wait(1000);
