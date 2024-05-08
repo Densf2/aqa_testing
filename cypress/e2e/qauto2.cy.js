@@ -94,6 +94,8 @@ describe('tests for hillel auto', () => {
       );
   });
 
+  // usage of DDT approach in the cypress tests
+  // there should be test cases based on count of data in the file
   // eslint-disable-next-line no-restricted-syntax
   for (const { id, mileageVal } of mileage) {
     it(`${id} creating car with mileage`, () => {
